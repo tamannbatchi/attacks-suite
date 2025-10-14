@@ -1,0 +1,36 @@
+# Rust build artifacts
+/target/
+Cargo.lock
+
+# ML artifacts
+*.pt
+*.onnx
+*.h5
+*.pkl
+*.joblib
+
+# Datasets and traces
+*.csv
+*.tsv
+*.npy
+*.npz
+*.json
+
+# Python cache and temp
+__pycache__/
+*.pyc
+*.pyo
+*.log
+*.tmp
+
+# Jupyter notebooks 
+.ipynb_checkpoints/
+
+# IDE and editor configs
+.vscode/
+.idea/
+*.swp
+
+# Misc
+.DS_Store
+Thumbs.db
