@@ -17,7 +17,8 @@ T2 = np.array([
 combined = T1 * T2  # shape (2, 8)
 
 # Hypothèse sur bit de k
-def model_for_bit(bit): return 0.8 if bit == 1 else 0.3
+def model_for_bit(bit): 
+    return 0.8 if bit == 1 else 0.3
 
 # Corrélation sur chaque bit
 k_recovered = []

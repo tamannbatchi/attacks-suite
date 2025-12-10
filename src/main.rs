@@ -2,6 +2,7 @@ mod bip32;
 mod blind_signing;
 mod ecdsa;
 mod fault_attacks_ml;
+mod post_quantum_cryptography;
 mod sca_attacks_dl;
 
 use bip32::{
@@ -27,6 +28,12 @@ use blind_signing::{
 
 use fault_attacks_ml::{
     ml_classifier::train_classifier, ml_secret_recovery::recover_secret, trace::gen_traces,
+};
+
+use post_quantum_cryptography::Dilithium::dilithium::{keygen, sign, verify};
+use post_quantum_cryptography::Kyber::kem::{decapsulate, encapsulate, keygen as kyber_keygen};
+use post_quantum_cryptography::Sphincs::sphincs::{
+    keygen as sphincs_keygen, sign as sphincs_sign, verify as sphincs_verify,
 };
 
 use hmac::{Hmac, Mac};
@@ -176,8 +183,45 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         recovered_bits
     );
 
-    // Test 8: Blindind signing
-    println!("Test 8: Blinding signing attack and contermeasures");
+    // Test 8: Kyber(ML-KEM) Post-Quantum Key Exchange
+    println!("Test 8 : Kyber Post-Quantum Key Exchange");
+    let (pk, sk) = kyber_keygen();
+    let (ct, ss1) = encapsulate(&pk);
+    let ss2 = decapsulate(&sk, &ct);
+
+    println!("SS encaps: {:02x?}", ss1);
+    println!("SS decaps: {:02x?}", ss2);
+    println!("Match: {}", ss1 == ss2);
+
+    // Test 9: Dilithium2(ML-DSA)
+    println!("Test 9 : Dilithium Post-Quantum Signature");
+    let (pk, sk) = keygen();
+    let msg = b"bonjour, Dilithium2 (ML-DSA-44)!";
+    let sig = sign(&sk, msg);
+    let ok = verify(&pk, msg, &sig);
+    println!("Signature valid: {}", ok);
+
+    // Test 10: SPHINCS
+    println!("Test 10 : SPHINCS Post-Quantum Signature");
+    // Generate keypair
+    let (pk, sk) = sphincs_keygen();
+
+    // Message to sign
+    let msg = b"Bonjour SPHINCS+ (pedagogical)";
+
+    // Sign and verify
+    let sig = sphincs_sign(&sk, msg);
+    let ok = sphincs_verify(&pk, msg, &sig);
+
+    println!("Signature valid: {}", ok);
+    println!(
+        "PK size: {} bytes, SIG size: {} bytes",
+        pk.bytes.len(),
+        sig.bytes.len()
+    );
+
+    // Test 11: Blind signing
+    println!("Test 11: Blinding signing attack and contermeasures");
     // Generation of a random private key to sign the transaction
     let key = SigningKey::random(&mut thread_rng());
 
@@ -203,7 +247,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         return Ok(());
     }
 
-    // Secure blindind signing
+    // Secure blind signing
     match blind_sign(&malicious_tx, &key) {
         Ok(sig) => println!(" Transaction signed : {:?}", sig),
         Err(e) => eprintln!(" Error during signing : {}", e),
@@ -253,7 +297,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         println!(" Invalid ZKP : transaction blocked.");
         return Ok(());
     }
-    // Secure Blinding Signing
+    // Secure Blind Signing
     match blind_sign(&malicious_tx, &key) {
         Ok(sig) => println!(" Transaction signed with valid ZKP : {:?}", sig),
         Err(e) => eprintln!(" Error during the signature : {}", e),

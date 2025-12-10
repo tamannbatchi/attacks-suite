@@ -10,6 +10,7 @@ license = "MIT"
 # Cryptography
 hmac = "0.12"
 sha2 = "0.10"
+sha3 = "0.10"
 hex-literal = "0.3"
 rand = "0.8"
 k256 = { version = "0.13", features = ["ecdsa", "arithmetic"] }

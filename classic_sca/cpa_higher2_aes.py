@@ -12,7 +12,8 @@ T2 = np.array([0.6, 0.7, 0.5, 0.8, 0.6])  # démasquage
 combined = T1 * T2
 
 # Modèle théorique
-def hamming_weight(x): return bin(x).count('1')
+def hamming_weight(x):
+    return bin(x).count('1')
 model = np.array([hamming_weight(p ^ true_key) for p in plaintexts])
 
 # Corrélation

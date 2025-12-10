@@ -1,6 +1,6 @@
 # Cryptographic Attack Suite
 
-_A multi-modular offensive framework targeting BIP32, ECDSA,AES and blind signing protocols through glitch injection, timing analysis, SCA based on deep learning, fault attacks and machine learning, blinding signing and countermeasures (classic and ZKP, ZK SNARK precisely)._
+_A multi-modular offensive framework targeting BIP32, ECDSA, RSA, AES, Kyber, Dilithium, SPHINCS+ and blind signing protocols through glitch injection, timing analysis, SCA based on deep learning, fault attacks and machine learning, blind signing and countermeasures (classic and ZKP, ZK SNARK precisely)._
 
 ---
 
@@ -21,6 +21,8 @@ Every module is built for clarity, modularity, and strategic visibility.
   _The suite identifies reused `r` values across ECDSA signatures and reconstructs the private key using `(r, s, z)` collisions. This attack is fully automated and reproducible, showcasing the critical importance of nonce uniqueness in digital signatures._
 
 - **DPA, CPA, Higher-2 DPA and CPA,Template attack on AES and ECDSA algorithms**
+
+- **Post-quantum cryptographic algorithms : Kyber, Dilithium and SPHINCS+**
 
 - **Blind signing attacks with classic and ZKP-based countermeasures** 
   _Blind signing scenarios are modeled to simulate cases where users unknowingly authorize malicious transactions. The project demonstrates how attackers can manipulate opaque payloads to bypass user consent, and benchmarks both classic countermeasures (display data, conditional signature) and advanced zero-knowledge defenses (zkSNARKs) to restore verifiability and trust._
@@ -44,6 +46,7 @@ Every module is built for clarity, modularity, and strategic visibility.
 - `blind_signing/`: Attacks and countermeasures (classic + ZKP)
 - `fault_attacks_ml/`: Machine Learning-based fault recovery
 - `sca_attacks_dl/`: Deep Learning-based side-channel attacks
+- `post_quantum_cryptography/`: Kyber, Dilithium and SPHINCS+
 
 Each module is fully commented.
 
